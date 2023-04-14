@@ -10,6 +10,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import './CreateBox.css';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 const CreateBox = () => {
 	const auth = useContext(AuthContext);
@@ -36,6 +37,10 @@ const CreateBox = () => {
 			},
 			containerId: {
 				value: '',
+				isValid: false,
+			},
+			image: {
+				value: null,
 				isValid: false,
 			},
 		},
@@ -69,6 +74,7 @@ const CreateBox = () => {
 					is_flamable: formState.inputs.is_flamable.value,
 					is_spoilable: formState.inputs.is_spoilable.value,
 					containerId: formState.inputs.containerId.value,
+					image: formState.inputs.image.value,
 				},
 				{
 					'Content-Type': 'application/json',
@@ -125,6 +131,7 @@ const CreateBox = () => {
 							</option>
 						))}
 				</Input>
+				<ImageUpload id='image' onInput={inputHandler} errorText='Please provide an image.' />
 
 				<Button type='submit' disabled={!formState.isValid}>
 					ADD BOX
