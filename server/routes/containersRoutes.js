@@ -1,12 +1,14 @@
 const express = require('express');
 const { authenticateJWT } = require('../utils/middleware');
 const connection = require('../db');
-const router = express.Router();
 
-module.exports = (authenticateJWT) => {
+const containersRoutes = function (authenticateJWT) {
+	const router = express.Router();
+
 	// GET route
 	router.get('/containers', (req, res) => {
-		const sql = 'SELECT * FROM containers';
+		const sql =
+			'SELECT containers.id, containers.size, COUNT(boxes.id) as boxes_count, COALESCE(SUM(boxes.weight), 0) as total_weight FROM containers LEFT JOIN boxes ON containers.id = boxes.container_id GROUP BY containers.id';
 		connection.query(sql, (err, result) => {
 			if (err) {
 				res.status(500).json({ error: 'Error fetching containers' });
@@ -75,6 +77,7 @@ module.exports = (authenticateJWT) => {
 			});
 		});
 	});
-
-	module.exports = router;
+	return router;
 };
+
+module.exports = containersRoutes;

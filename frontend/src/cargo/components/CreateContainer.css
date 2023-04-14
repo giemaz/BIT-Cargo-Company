@@ -1,0 +1,8 @@
+.container-form {
+	width: 90%;
+	max-width: 25rem;
+	margin: 7rem auto;
+	text-align: center;
+	background: rgba(255, 255, 255, 0.486);
+	backdrop-filter: blur(10px);
+}

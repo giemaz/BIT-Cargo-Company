@@ -3,16 +3,29 @@ const express = require('express');
 const { authenticateJWT } = require('../utils/middleware');
 const connection = require('../db');
 const { upload } = require('../utils/multerConfig');
-const router = express.Router();
 const fs = require('fs');
 
-module.exports = (authenticateJWT) => {
+const boxesRoutes = function (authenticateJWT) {
+	const router = express.Router();
 	// GET route
 	router.get('/boxes', (req, res) => {
 		const sql = 'SELECT * FROM boxes';
 		connection.query(sql, (err, result) => {
 			if (err) {
 				res.status(500).json({ error: 'Error fetching boxes' });
+			} else {
+				res.json(result);
+			}
+		});
+	});
+
+	// GET containers boxes
+	router.get('/boxes/container/:containerId', (req, res) => {
+		const containerId = req.params.containerId;
+		const sql = 'SELECT * FROM boxes WHERE container_id = ?';
+		connection.query(sql, containerId, (err, result) => {
+			if (err) {
+				res.status(500).json({ error: 'Error fetching boxes for the container' });
 			} else {
 				res.json(result);
 			}
@@ -124,6 +137,7 @@ module.exports = (authenticateJWT) => {
 			});
 		});
 	});
-
-	module.exports = router;
+	return router;
 };
+
+module.exports = boxesRoutes;

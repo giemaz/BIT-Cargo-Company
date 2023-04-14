@@ -16,8 +16,8 @@ const boxesRoutes = require('./routes/boxesRoutes');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(authRoutes);
-app.use(boxesRoutes);
-app.use(containersRoutes);
+app.use(boxesRoutes(authenticateJWT));
+app.use(containersRoutes(authenticateJWT));
 
 app.listen(port, () => {
 	console.log(`LN is on port number: ${port}`);
